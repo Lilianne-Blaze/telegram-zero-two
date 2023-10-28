@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
 @Slf4j
-public class MethodUtils {
+public class BotMethodUtils {
 
     public static <T extends Serializable, Method extends BotApiMethod<T>> Optional<T> executeOpt(AbsSender bot,
             Method method) {

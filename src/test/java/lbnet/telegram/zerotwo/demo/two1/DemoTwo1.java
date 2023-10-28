@@ -24,11 +24,11 @@ public class DemoTwo1 {
 
             // first instance
             TwoBot1 twoBot1 = new TwoBot1(DemoParams.BOTUSERNAME, DemoParams.BOTTOKEN);
-            BotSession botSession1 = botsApi.registerBot(twoBot1);
+            MultiBotSession botSession1 = (MultiBotSession) botsApi.registerBot(twoBot1);
 
             // second instance
             TwoBot1 twoBot2 = new TwoBot1(DemoParams.BOTUSERNAME, DemoParams.BOTTOKEN);
-            BotSession botSession2 = botsApi.registerBot(twoBot2);
+            MultiBotSession botSession2 = (MultiBotSession) botsApi.registerBot(twoBot2);
 
             // TwoBot twoBot3 = new TwoBot(DemoParams.BOTUSERNAME, DemoParams.BOTTOKEN);
             // BotSession botSession3 = botsApi.registerBot(twoBot3);

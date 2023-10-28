@@ -1,6 +1,6 @@
 package lbnet.telegram.zerotwo.demo.two1;
 
-import lbnet.telegram.zerotwo.utils.MethodUtils;
+import lbnet.telegram.zerotwo.utils.BotMethodUtils;
 import lbnet.telegram.zerotwo.utils.MiscUtils;
 import lbnet.telegram.zerotwo.utils.UpdateUtils;
 import lombok.Getter;
@@ -19,33 +19,35 @@ public class TwoBot1 extends TelegramLongPollingBot {
     protected String prefix = "[" + hashCode() + "] ";
 
     public TwoBot1(String botUserame, String botToken) {
-	this(botUserame, botToken, null);
+        this(botUserame, botToken, null);
     }
 
     public TwoBot1(String botUserame, String botToken, DefaultBotOptions botOptions) {
-	super(botOptions != null ? botOptions : new DefaultBotOptions(), botToken);
-	this.botUsername = botUserame;
+        super(botOptions != null ? botOptions : new DefaultBotOptions(), botToken);
+        this.botUsername = botUserame;
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-	log.info("updateReceived: {}", UpdateUtils.updateToString(update));
+        log.info("updateReceived: {}", UpdateUtils.updateToString(update));
 
-	if (UpdateUtils.textContainsNoEx(update, "exit")) {
-	    MiscUtils.systemExitDelayed(3000);
-	}
+        SendMessage sm = UpdateUtils.newReplyWithQuote(update,
+                prefix + "You wrote: " + UpdateUtils.getTextOpt(update).orElse("???"));
+        BotMethodUtils.executeOpt(this, sm);
 
-	if (UpdateUtils.textContainsNoEx(update, "id")) {
-	    String t = prefix + "chatId = " + update.getMessage().getChatId();
-	    t = t + "\nuserChat = " + UpdateUtils.isUserChatNoEx(update);
-	    t = t + "\ngroupChat = " + UpdateUtils.isAnyGroupChatNoEx(update);
-	    SendMessage sm = UpdateUtils.newReplyWithQuote(update, t);
-	    MethodUtils.executeOpt(this, sm);
-	}
+        if (UpdateUtils.textContainsNoEx(update, "exit")) {
+            SendMessage sm2 = UpdateUtils.newReplyWithQuote(update, prefix + "Exiting in a sec.");
+            BotMethodUtils.executeOpt(this, sm2);
+            MiscUtils.systemExitDelayed(3000);
+        }
 
-	SendMessage sm = UpdateUtils.newReplyWithQuote(update,
-		prefix + "You wrote: " + UpdateUtils.getTextOpt(update).orElse("???"));
-	MethodUtils.executeOpt(this, sm);
+        if (UpdateUtils.textContainsNoEx(update, "id")) {
+            String t = prefix + "chatId = " + update.getMessage().getChatId();
+            t = t + "\nuserChat = " + UpdateUtils.isUserChatNoEx(update);
+            t = t + "\ngroupChat = " + UpdateUtils.isAnyGroupChatNoEx(update);
+            SendMessage sm2 = UpdateUtils.newReplyWithQuote(update, t);
+            BotMethodUtils.executeOpt(this, sm2);
+        }
 
     }
 
