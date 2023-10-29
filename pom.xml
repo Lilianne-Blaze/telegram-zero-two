@@ -90,6 +90,42 @@
         <plugins>
             
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+
+                                <property name="hundred_years" value="3155760000000"/>
+                                
+                                <macrodef name="copyNeverOverwrite">
+                                    <attribute name="source"/>
+                                    <attribute name="target"/>
+                                    <sequential>
+                                        <mkdir dir="@{target}"/>
+                                        <copy todir="@{target}" verbose="true" preservelastmodified="true" overwrite="false" granularity="${hundred_years}">
+                                            <fileset dir="@{source}"/>
+                                        </copy>
+                                    </sequential>
+                                </macrodef>
+
+                                <copyNeverOverwrite source="${basedir}/src/main/empty-agent-metadata" target="${basedir}/src/main/resources/META-INF/native-image/${project.groupId}/${project.artifactId}/generated"/>
+                                <copyNeverOverwrite source="${basedir}/src/main/empty-agent-metadata" target="${basedir}/target/native/agent-output/main"/>
+                                <copyNeverOverwrite source="${basedir}/src/main/empty-agent-metadata" target="${basedir}/target/native/agent-output/test"/>
+
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
                 <groupId>net.revelc.code.formatter</groupId>
                 <artifactId>formatter-maven-plugin</artifactId>
                 <!-- 2.16.0 is the latest version that still supports Java 8 -->
